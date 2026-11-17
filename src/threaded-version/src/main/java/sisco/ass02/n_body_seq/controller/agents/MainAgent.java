@@ -1,5 +1,7 @@
 package sisco.ass02.n_body_seq.controller.agents;
 
+import sisco.ass02.n_body_seq.concurrent.barrier.Barrier;
+import sisco.ass02.n_body_seq.concurrent.barrier.BarrierImpl;
 import sisco.ass02.n_body_seq.config.SimulationConfig;
 import sisco.ass02.n_body_seq.model.Model;
 
@@ -21,9 +23,15 @@ public class MainAgent extends Thread {
         var bodies = model.bodies();
         int chunkSize = config.chunkSize(bodies.size());
 
-        List<ComputeAgent> agents = bodies.stream()
+        var chunks = bodies.stream()
                 .gather(Gatherers.windowFixed(chunkSize))
-                .map(chunk -> new ComputeAgent(model, config, chunk))
+                .toList();
+
+        Barrier firstBarrier = new BarrierImpl(chunks.size());
+        Barrier secondBarrier = new BarrierImpl(chunks.size());
+
+        var agents = chunks.stream()
+                .map(chunk -> new ComputeAgent(model, firstBarrier, secondBarrier, config, chunk))
                 .toList();
 
         long startTime = System.currentTimeMillis();

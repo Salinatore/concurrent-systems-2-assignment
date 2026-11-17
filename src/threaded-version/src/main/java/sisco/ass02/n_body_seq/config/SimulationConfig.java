@@ -4,6 +4,7 @@ public record SimulationConfig(int nThreads, int nSteps, double dt, boolean test
 
     public static final double DEFAULT_DT = 0.001;
     public static final boolean DEFAULT_TESTING = false;
+    public static final int DEFAULT_N_STEPS = 1000;
 
     public SimulationConfig {
         if (nThreads <= 0) throw new IllegalArgumentException("nThreads must be > 0");
@@ -20,7 +21,7 @@ public record SimulationConfig(int nThreads, int nSteps, double dt, boolean test
     }
 
     public static SimulationConfig defaults() {
-        return new SimulationConfig(Runtime.getRuntime().availableProcessors(), 1000);
+        return new SimulationConfig(Runtime.getRuntime().availableProcessors(), DEFAULT_N_STEPS);
     }
 
     public SimulationConfig withTesting(boolean testing) {

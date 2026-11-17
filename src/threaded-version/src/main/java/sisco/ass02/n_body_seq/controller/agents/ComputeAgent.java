@@ -17,10 +17,10 @@ public class ComputeAgent extends Thread {
     private final Barrier secondBarrier;
     private final double dt;
 
-    public ComputeAgent(Model model, SimulationConfig config, List<Body> chunk) {
+    public ComputeAgent(Model model, Barrier firstBarrier, Barrier secondBarrier, SimulationConfig config, List<Body> chunk) {
         this.bodies = model.bodies();
-        this.firstBarrier = model.firstBarrier();
-        this.secondBarrier = model.secondBarrier();
+        this.firstBarrier = firstBarrier;
+        this.secondBarrier = secondBarrier;
         this.nSteps = config.nSteps();
         this.chunk = chunk;
         this.dt = config.dt();
