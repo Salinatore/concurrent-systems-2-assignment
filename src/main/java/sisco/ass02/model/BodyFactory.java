@@ -1,6 +1,5 @@
-package sisco.ass02.util;
+package sisco.ass02.model;
 
-import sisco.ass02.model.Body;
 import sisco.ass02.model.geometry.P2d;
 import sisco.ass02.model.geometry.V2d;
 
@@ -8,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BodySets {
+public final class BodyFactory {
 
-	private BodySets() { }
+	private BodyFactory() { }
 
 	public static List<Body> twoBodies() {
 		var bodies = new ArrayList<Body>();
@@ -27,15 +26,11 @@ public class BodySets {
 		return bodies;
 	}
 
-	public static List<Body> random(int nBodies) {
-		return random(nBodies, new Random(System.currentTimeMillis()));
-	}
-
 	public static List<Body> random(int nBodies, long seed) {
 		return random(nBodies, new Random(seed));
 	}
 
-	public static List<Body> random(int nBodies, Random rand) {
+	private static List<Body> random(int nBodies, Random rand) {
 		var bodies = new ArrayList<Body>();
 		for (int i = 0; i < nBodies; i++) {
 			double x = -1.0 + 2.0*rand.nextDouble();
