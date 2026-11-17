@@ -1,9 +1,9 @@
-package sisco.ass02.n_body_seq;
+package sisco.ass02.threaded;
 
-import sisco.ass02.n_body_seq.config.SimulationConfig;
-import sisco.ass02.n_body_seq.controller.Controller;
-import sisco.ass02.n_body_seq.model.Model;
-import sisco.ass02.n_body_seq.util.BodySets;
+import sisco.ass02.threaded.config.SimulationConfig;
+import sisco.ass02.threaded.controller.Controller;
+import sisco.ass02.threaded.model.Model;
+import sisco.ass02.threaded.util.BodySets;
 
 public class SimulationMain {
 

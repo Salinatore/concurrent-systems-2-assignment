@@ -1,8 +1,8 @@
-package sisco.ass02.n_body_seq.model;
+package sisco.ass02.threaded.model;
 
-import sisco.ass02.n_body_seq.model.exception.InfiniteForceException;
-import sisco.ass02.n_body_seq.model.geometry.P2d;
-import sisco.ass02.n_body_seq.model.geometry.V2d;
+import sisco.ass02.threaded.model.exception.InfiniteForceException;
+import sisco.ass02.threaded.model.geometry.P2d;
+import sisco.ass02.threaded.model.geometry.V2d;
 
 public class Body implements Comparable<Body>{
     

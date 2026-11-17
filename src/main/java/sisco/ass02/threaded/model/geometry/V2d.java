@@ -1,6 +1,6 @@
-package sisco.ass02.n_body_seq.model.geometry;
+package sisco.ass02.threaded.model.geometry;
 
-import sisco.ass02.n_body_seq.model.exception.NullVectorException;
+import sisco.ass02.threaded.model.exception.NullVectorException;
 
 /**
  * 

@@ -1,11 +1,10 @@
-package sisco.ass02.n_body_seq.controller.agents;
+package sisco.ass02.threaded.controller.agents;
 
-import sisco.ass02.n_body_seq.concurrent.barrier.Barrier;
-import sisco.ass02.n_body_seq.concurrent.barrier.BarrierImpl;
-import sisco.ass02.n_body_seq.config.SimulationConfig;
-import sisco.ass02.n_body_seq.model.Model;
+import sisco.ass02.threaded.concurrent.barrier.Barrier;
+import sisco.ass02.threaded.concurrent.barrier.BarrierImpl;
+import sisco.ass02.threaded.config.SimulationConfig;
+import sisco.ass02.threaded.model.Model;
 
-import java.util.List;
 import java.util.stream.Gatherers;
 
 public class MainAgent extends Thread {

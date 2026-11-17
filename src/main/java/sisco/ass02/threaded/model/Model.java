@@ -1,4 +1,4 @@
-package sisco.ass02.n_body_seq.model;
+package sisco.ass02.threaded.model;
 
 import java.util.List;
 import java.util.Objects;

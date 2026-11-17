@@ -1,4 +1,4 @@
-package sisco.ass02.n_body_seq.config;
+package sisco.ass02.threaded.config;
 
 public record SimulationConfig(int nThreads, int nSteps, double dt, boolean testing) {
 

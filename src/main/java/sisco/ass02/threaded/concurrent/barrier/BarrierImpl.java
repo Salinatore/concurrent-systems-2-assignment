@@ -1,4 +1,4 @@
-package sisco.ass02.n_body_seq.concurrent.barrier;
+package sisco.ass02.threaded.concurrent.barrier;
 
 public class BarrierImpl implements Barrier {
 

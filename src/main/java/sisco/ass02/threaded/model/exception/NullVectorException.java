@@ -1,4 +1,4 @@
-package sisco.ass02.n_body_seq.model.exception;
+package sisco.ass02.threaded.model.exception;
 
 public class NullVectorException extends Exception {
 
