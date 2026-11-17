@@ -1,40 +1,22 @@
 package sisco.ass02.n_body_seq;
 
-import java.util.ArrayList;
+import sisco.ass02.n_body_seq.config.SimulationConfig;
+import sisco.ass02.n_body_seq.controller.Controller;
+import sisco.ass02.n_body_seq.model.Model;
+import sisco.ass02.n_body_seq.util.BodySets;
 
-/**
- * 
- * N-Body simulation - simple sequential version
- * 
- * @author aricci
- */
 public class SimulationMain {
 
-    public static void main(String[] args) {
+    public static final int N_THREADS = 6;
+    public static final int N_STEPS = 1000;
+    public static final int N_BODIES = 10;
+    public static final int SEED = 42;
 
-    	
-    	NBodySimulation sim = new NBodySimulation();
-    	
-    	// sim.init(TestBodySets.bodySet_two_bodies());
-    	// sim.init(TestBodySets.bodySet_three_bodies());    	
-    	sim.initRandom(5000);
-    	
-    	int nSteps = 100;
-    	long startTime = System.currentTimeMillis();    	
+    static void main() {
+        var bodies = BodySets.random(N_BODIES, SEED);
+        var config = new SimulationConfig(N_THREADS, N_STEPS);
+        var model = new Model(bodies, config);
 
-    	log("Starting simulation with " + sim.getNumBodies() + " bodies - " + nSteps + " steps...");
-    	
-    	sim.execute(nSteps);
-        
-    	long endTime = System.currentTimeMillis();
-
-    	log("Simulation completed in " + (endTime - startTime)/1000 + " seconds.");
-        
+        new Controller(model, config);
     }
-    
-    private static void log(String msg) {
-    	System.out.println("[" + System.currentTimeMillis() + "] " + msg);
-    }
-
-
 }

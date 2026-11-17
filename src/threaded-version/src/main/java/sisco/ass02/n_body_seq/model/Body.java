@@ -1,6 +1,10 @@
-package sisco.ass02.n_body_seq;
+package sisco.ass02.n_body_seq.model;
 
-public class Body {
+import sisco.ass02.n_body_seq.model.exception.InfiniteForceException;
+import sisco.ass02.n_body_seq.model.geometry.P2d;
+import sisco.ass02.n_body_seq.model.geometry.V2d;
+
+public class Body implements Comparable<Body>{
     
 	private static final double G_CONST_SCALED = 0.001;
 	
@@ -37,7 +41,7 @@ public class Body {
     public double getRadius() {
     	return radius;
     }
-    
+
     public boolean equals(Object b) {
     	return ((Body)b).id == id;
     }
@@ -107,5 +111,15 @@ public class Body {
 		} else {
 			throw new InfiniteForceException();
 		}
-    }    
+    }
+
+    @Override
+    public String toString() {
+        return pos.toString() + " " + id;
+    }
+
+    @Override
+    public int compareTo(Body o) {
+        return Integer.compare(this.id, o.id);
+    }
 }
