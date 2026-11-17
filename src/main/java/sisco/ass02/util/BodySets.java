@@ -1,8 +1,8 @@
-package sisco.ass02.threaded.util;
+package sisco.ass02.util;
 
-import sisco.ass02.threaded.model.Body;
-import sisco.ass02.threaded.model.geometry.P2d;
-import sisco.ass02.threaded.model.geometry.V2d;
+import sisco.ass02.model.Body;
+import sisco.ass02.model.geometry.P2d;
+import sisco.ass02.model.geometry.V2d;
 
 import java.util.ArrayList;
 import java.util.List;

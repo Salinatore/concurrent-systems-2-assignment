@@ -1,10 +1,10 @@
 package sisco.ass02.threaded.controller.agents;
 
 import sisco.ass02.threaded.concurrent.barrier.Barrier;
-import sisco.ass02.threaded.config.SimulationConfig;
-import sisco.ass02.threaded.model.Body;
-import sisco.ass02.threaded.model.Model;
-import sisco.ass02.threaded.model.geometry.V2d;
+import sisco.ass02.config.SimulationConfig;
+import sisco.ass02.model.Body;
+import sisco.ass02.model.Model;
+import sisco.ass02.model.geometry.V2d;
 
 import java.util.List;
 

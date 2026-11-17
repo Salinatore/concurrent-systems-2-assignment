@@ -2,8 +2,8 @@ package sisco.ass02.threaded.controller.agents;
 
 import sisco.ass02.threaded.concurrent.barrier.Barrier;
 import sisco.ass02.threaded.concurrent.barrier.BarrierImpl;
-import sisco.ass02.threaded.config.SimulationConfig;
-import sisco.ass02.threaded.model.Model;
+import sisco.ass02.config.SimulationConfig;
+import sisco.ass02.model.Model;
 
 import java.util.stream.Gatherers;
 
@@ -20,7 +20,7 @@ public class MainAgent extends Thread {
     @Override
     public void run() {
         var bodies = model.bodies();
-        int chunkSize = config.chunkSize(bodies.size());
+        int chunkSize = config.chunkSize();
 
         var chunks = bodies.stream()
                 .gather(Gatherers.windowFixed(chunkSize))
@@ -34,7 +34,7 @@ public class MainAgent extends Thread {
                 .toList();
 
         long startTime = System.nanoTime();
-        log("Starting simulation with " + bodies.size() + " bodies - "  + config.nThreads() + " threads - " + config.nSteps() + " steps...");
+        log("Starting threaded simulation with " + bodies.size() + " bodies - "  + config.nThreads() + " threads - " + config.nSteps() + " steps...");
 
         agents.forEach(Thread::start);
 

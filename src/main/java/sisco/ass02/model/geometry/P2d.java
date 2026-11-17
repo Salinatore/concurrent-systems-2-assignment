@@ -1,4 +1,4 @@
-package sisco.ass02.threaded.model.geometry;
+package sisco.ass02.model.geometry;
 
 /**
  * 

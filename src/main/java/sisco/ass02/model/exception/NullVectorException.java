@@ -1,4 +1,4 @@
-package sisco.ass02.threaded.model.exception;
+package sisco.ass02.model.exception;
 
 public class NullVectorException extends Exception {
 
