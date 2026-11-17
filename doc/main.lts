@@ -1,23 +1,22 @@
-const N_BODIES = 3
-range R_BODIES = 0..N_BODIES-1
+const N_PROCESSES = 3
+range R_PROCESSES = 0..N_PROCESSES-1
 
 const N_ITERATION = 4
 range R_ITERATION = 0..N_ITERATION-1
 
-// BODY(N): one process per body
-BODY(N=0) = ITERATION[0],
+PROCESS(N=0) = ITERATION[0],
 ITERATION[it:R_ITERATION] = (
-	compute_velocity[N][it]      // total force -> acceleration -> new velocity
-	-> barrier1[it]              // everyone has finished reading the old positions
-	-> update_position[N][it]
+	compute_velocity[N][it]      // total force -> acceleration -> new velocity (reads are done concurrently on the bodies' attributes: mass and positions - not on velocity nor acceleration - so they can be written without races)
+	-> barrier1[it]              // everyone has finished reading the old positions and updating acceleration and velocity
+	-> update_position[N][it]	 // each process updates its own bodies (so no races, everyone is just writing)
 	-> barrier2[it]              // everyone has finished writing the new positions
 	-> LEADER_STEP[it]
 ),
-// Only body 0 advances the virtual time and displays the stage
+// Only one process (here process 0) advances the virtual time and displays the stage
 LEADER_STEP[it:R_ITERATION] =
 	if (N == 0) then (update_time[it] -> display[it] -> WAIT[it])
 	else WAIT[it],
-// All the other bodies wait here until body 0 is done
+// All the other processes wait here until the leader is done
 WAIT[it:R_ITERATION] = (
 	barrier3[it] -> NEXT[it]
 ),
@@ -26,7 +25,8 @@ NEXT[it:R_ITERATION] =
 	else ITERATION[it+1].
 
 // barrier1, barrier2 and barrier3 carry no body index, so all bodies synchronise on them
-// per simplicità la terza barrira appare prima della fine del loop, ma potrebbe apparira prima dell'update della accellerazione
-// 	questo però non dovrebbe determinare una semplificazione molto importante dato che tutti i processi dovrebbero terminare la computazione all'unisono
-// 	e la comp. del processo 1 è veloce 
-||SIMULATION = (forall[n:R_BODIES] BODY(n)).
+// For simplicity, the third barrier appears before the end of the loop, but it could appear
+// before the acceleration update instead.
+// 	This should not make a significant difference, since all processes should finish their computation in unison
+// 	and the leader process's computation is fast.
+||SIMULATION = (forall[n:R_PROCESSES] PROCESS(n)).
