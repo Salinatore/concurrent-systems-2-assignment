@@ -1,0 +1,32 @@
+const N_BODIES = 3
+range R_BODIES = 0..N_BODIES-1
+
+const N_ITERATION = 4
+range R_ITERATION = 0..N_ITERATION-1
+
+// BODY(N): one process per body
+BODY(N=0) = ITERATION[0],
+ITERATION[it:R_ITERATION] = (
+	compute_velocity[N][it]      // total force -> acceleration -> new velocity
+	-> barrier1[it]              // everyone has finished reading the old positions
+	-> update_position[N][it]
+	-> barrier2[it]              // everyone has finished writing the new positions
+	-> LEADER_STEP[it]
+),
+// Only body 0 advances the virtual time and displays the stage
+LEADER_STEP[it:R_ITERATION] =
+	if (N == 0) then (update_time[it] -> display[it] -> WAIT[it])
+	else WAIT[it],
+// All the other bodies wait here until body 0 is done
+WAIT[it:R_ITERATION] = (
+	barrier3[it] -> NEXT[it]
+),
+NEXT[it:R_ITERATION] =
+	if (it == N_ITERATION-1) then END
+	else ITERATION[it+1].
+
+// barrier1, barrier2 and barrier3 carry no body index, so all bodies synchronise on them
+// per simplicità la terza barrira appare prima della fine del loop, ma potrebbe apparira prima dell'update della accellerazione
+// 	questo però non dovrebbe determinare una semplificazione molto importante dato che tutti i processi dovrebbero terminare la computazione all'unisono
+// 	e la comp. del processo 1 è veloce 
+||SIMULATION = (forall[n:R_BODIES] BODY(n)).
