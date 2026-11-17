@@ -27,6 +27,5 @@ NEXT[it:R_ITERATION] =
 // barrier1, barrier2 and barrier3 carry no body index, so all bodies synchronise on them
 // For simplicity, the third barrier appears before the end of the loop, but it could appear
 // before the acceleration update instead.
-// 	This should not make a significant difference, since all processes should finish their computation in unison
-// 	and the leader process's computation is fast.
+// 	This should not make a significant difference, since the leader process's computation is fast.
 ||SIMULATION = (forall[n:R_PROCESSES] PROCESS(n)).
