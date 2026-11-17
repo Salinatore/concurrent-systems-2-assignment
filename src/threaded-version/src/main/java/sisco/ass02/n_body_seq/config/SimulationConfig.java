@@ -32,8 +32,4 @@ public record SimulationConfig(int nThreads, int nSteps, double dt, boolean test
         int wanted = Math.min(nThreads, nBodies);
         return (int) Math.ceil(nBodies / (double) wanted);
     }
-
-    public int effectiveAgents(int nBodies) {
-        return (int) Math.ceil(nBodies / (double) chunkSize(nBodies));
-    }
 }
