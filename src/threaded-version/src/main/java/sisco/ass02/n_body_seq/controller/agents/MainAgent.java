@@ -34,7 +34,7 @@ public class MainAgent extends Thread {
                 .map(chunk -> new ComputeAgent(model, firstBarrier, secondBarrier, config, chunk))
                 .toList();
 
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         log("Starting simulation with " + bodies.size() + " bodies - "  + config.nThreads() + " threads - " + config.nSteps() + " steps...");
 
         agents.forEach(Thread::start);
@@ -52,8 +52,8 @@ public class MainAgent extends Thread {
             bodies.stream().sorted().forEach(System.out::println);
         }
 
-        long endTime = System.currentTimeMillis();
-        log("Simulation completed in " + (endTime - startTime) + " millisecond.");
+        long elapsedNs = System.nanoTime() - startTime;
+        log(String.format("Simulation completed in %.3f s", elapsedNs / 1e9));
     }
 
     private static void log(String msg) {
