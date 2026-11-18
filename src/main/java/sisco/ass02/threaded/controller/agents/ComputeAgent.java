@@ -7,20 +7,24 @@ import sisco.ass02.model.Model;
 import sisco.ass02.model.geometry.V2d;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class ComputeAgent extends Thread {
 
-    private final List<Body> bodies;
+    private final Function<Body, V2d> totalForceOn;
     private final List<Body> chunk;
     private final long nSteps;
-    private final Barrier firstBarrier;
-    private final Barrier secondBarrier;
+    private final Barrier barrier;
     private final double dt;
 
-    public ComputeAgent(Model model, Barrier firstBarrier, Barrier secondBarrier, SimulationConfig config, List<Body> chunk) {
-        this.bodies = model.bodies();
-        this.firstBarrier = firstBarrier;
-        this.secondBarrier = secondBarrier;
+    public ComputeAgent(
+            Function<Body, V2d> totalForceOn,
+            Barrier barrier,
+            SimulationConfig config,
+            List<Body> chunk)
+    {
+        this.totalForceOn = totalForceOn;
+        this.barrier = barrier;
         this.nSteps = config.nSteps();
         this.chunk = chunk;
         this.dt = config.dt();
@@ -33,13 +37,13 @@ public class ComputeAgent extends Thread {
 
         while (iter < nSteps) {
             for (Body b : chunk) {
-                V2d totalForce = computeTotalGForceOnBody(b);
+                V2d totalForce = this.totalForceOn.apply(b);
                 V2d acc = new V2d(totalForce).scalarMul(1.0 / b.getMass());
                 b.updateVelocity(acc, dt);
             }
 
             try {
-                firstBarrier.hitAndWaitAll();
+                barrier.hitAndWaitAll();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -49,7 +53,7 @@ public class ComputeAgent extends Thread {
             }
 
             try {
-                secondBarrier.hitAndWaitAll();
+                barrier.hitAndWaitAll();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -57,24 +61,5 @@ public class ComputeAgent extends Thread {
             vt = vt + dt;
             iter++;
         }
-    }
-
-    /*
-     *
-     * Compute the total G force exerted on a body by the other bodies
-     *
-     */
-    private V2d computeTotalGForceOnBody(Body b) {
-        V2d totalForce = new V2d(0, 0);
-        for (Body otherBody : bodies) {
-            if (!b.equals(otherBody)) {
-                try {
-                    V2d forceByOtherBody = b.computeGForceBy(otherBody);
-                    totalForce.sum(forceByOtherBody);
-                } catch (Exception _) {
-                }
-            }
-        }
-        return totalForce;
     }
 }

@@ -1,12 +1,10 @@
 package sisco.ass02.threaded.controller.agents;
 
-import sisco.ass02.concurrent.Partition;
+import sisco.ass02.util.Partition;
 import sisco.ass02.threaded.concurrent.barrier.Barrier;
 import sisco.ass02.threaded.concurrent.barrier.BarrierImpl;
 import sisco.ass02.config.SimulationConfig;
 import sisco.ass02.model.Model;
-
-import java.util.stream.Gatherers;
 
 public class MainAgent extends Thread {
 
@@ -24,15 +22,14 @@ public class MainAgent extends Thread {
 
         var chunks = Partition.chunks(bodies, config.nThreads());
 
-        Barrier firstBarrier = new BarrierImpl(chunks.size());
-        Barrier secondBarrier = new BarrierImpl(chunks.size());
+        Barrier barrier = new BarrierImpl(chunks.size());
 
         var agents = chunks.stream()
-                .map(chunk -> new ComputeAgent(model, firstBarrier, secondBarrier, config, chunk))
+                .map(chunk -> new ComputeAgent(model::totalForceOn, barrier, config, chunk))
                 .toList();
 
         long startTime = System.nanoTime();
-        log("Starting threaded simulation with " + bodies.size() + " bodies - "  + config.nThreads() + " threads - " + config.nSteps() + " steps...");
+        log("Starting threaded simulation with " + bodies.size() + " bodies - "  + chunks.size() + " threads - " + config.nSteps() + " steps...");
 
         agents.forEach(Thread::start);
 

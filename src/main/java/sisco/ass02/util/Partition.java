@@ -1,4 +1,4 @@
-package sisco.ass02.concurrent;
+package sisco.ass02.util;
 
 import java.util.List;
 import java.util.stream.Gatherers;
