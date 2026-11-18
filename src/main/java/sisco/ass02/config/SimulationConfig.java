@@ -49,14 +49,4 @@ public record SimulationConfig(
     public SimulationConfig withBodies(int nBodies) {
         return new SimulationConfig(nThreads, nSteps, dt, testing, nBodies, seed);
     }
-
-    public SimulationConfig withSeed(long seed) {
-        return new SimulationConfig(nThreads, nSteps, dt, testing, nBodies, seed);
-    }
-
-    /** Number of bodies per task so that at most nThreads tasks are created. */
-    public int chunkSize() {
-        int tasks = Math.min(nThreads, nBodies);
-        return (nBodies + tasks - 1) / tasks;   // integer ceil division
-    }
 }
