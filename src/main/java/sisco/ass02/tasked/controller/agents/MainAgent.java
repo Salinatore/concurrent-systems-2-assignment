@@ -1,5 +1,6 @@
 package sisco.ass02.tasked.controller.agents;
 
+import sisco.ass02.concurrent.Partition;
 import sisco.ass02.model.Body;
 import sisco.ass02.model.geometry.V2d;
 import sisco.ass02.config.SimulationConfig;
@@ -29,8 +30,14 @@ public class MainAgent extends Thread {
         long startTime = System.nanoTime();
         log("Starting tasked simulation with " + bodies.size() + " bodies - "  + config.nThreads() + " threads - " + config.nSteps() + " steps...");
 
-        var velocityTasks = chunkedTasks(bodies, this::computeVelocity);
-        var positionTasks = chunkedTasks(bodies, b -> b.updatePos(config.dt()));
+        var chunks = Partition.chunks(bodies, config.nThreads());
+
+        var velocityTasks = chunks.stream()
+                .map(c -> Executors.callable(() -> c.forEach(this::computeVelocity)))
+                .toList();
+        var positionTasks = chunks.stream()
+                .map(c -> Executors.callable(() -> c.forEach(b -> b.updatePos(config.dt()))))
+                .toList();
 
         try (ExecutorService executor = Executors.newFixedThreadPool(config.nThreads())) {
             for (int i = 0; i < config.nSteps(); i++) {
@@ -48,18 +55,6 @@ public class MainAgent extends Thread {
 
         long elapsedNs = System.nanoTime() - startTime;
         log(String.format("Simulation completed in %.3f s", elapsedNs / 1e9));
-    }
-
-    private List<Callable<Object>> chunkedTasks(List<Body> bodies, Consumer<Body> action) {
-        List<Callable<Object>> tasks = new ArrayList<>();
-        if (bodies.isEmpty()) return tasks;
-
-        int chunk = config.chunkSize();
-        for (int from = 0; from < bodies.size(); from += chunk) {
-            List<Body> slice = bodies.subList(from, Math.min(from + chunk, bodies.size()));
-            tasks.add(Executors.callable(() -> slice.forEach(action)));
-        }
-        return tasks;
     }
 
     private void computeVelocity(Body b) {

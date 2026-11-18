@@ -1,5 +1,6 @@
 package sisco.ass02.threaded.controller.agents;
 
+import sisco.ass02.concurrent.Partition;
 import sisco.ass02.threaded.concurrent.barrier.Barrier;
 import sisco.ass02.threaded.concurrent.barrier.BarrierImpl;
 import sisco.ass02.config.SimulationConfig;
@@ -20,11 +21,8 @@ public class MainAgent extends Thread {
     @Override
     public void run() {
         var bodies = model.bodies();
-        int chunkSize = config.chunkSize();
 
-        var chunks = bodies.stream()
-                .gather(Gatherers.windowFixed(chunkSize))
-                .toList();
+        var chunks = Partition.chunks(bodies, config.nThreads());
 
         Barrier firstBarrier = new BarrierImpl(chunks.size());
         Barrier secondBarrier = new BarrierImpl(chunks.size());
