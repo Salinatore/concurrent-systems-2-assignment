@@ -1,0 +1,11 @@
+target = sisco.ass02.jpf.ThreadedSimJpfTest
+target.args = 3,4,1
+classpath = ${config_path}/build/classes
+sed -i 's#${config_path}/build/src#${config_path}/src#' *.jpf
+
+# default properties already include NotDeadlockedProperty + NoUncaughtExceptionsProperty
+listener = gov.nasa.jpf.listener.PreciseRaceDetector,gov.nasa.jpf.listener.DeadlockAnalyzer
+race.exclude = java.*,javax.*,jdk.*,sun.*
+report.console.property_violation = error,trace
+search.multiple_errors = false
+# nThreads > nBodies: Partition yields 3 chunks, not 4 -> barrier must be sized 3

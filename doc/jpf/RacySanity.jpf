@@ -1,0 +1,11 @@
+target = sisco.ass02.jpf.RacySanityJpfTest
+target.args = 
+classpath = ${config_path}/build/classes
+sourcepath = ${config_path}/build/src
+
+# default properties already include NotDeadlockedProperty + NoUncaughtExceptionsProperty
+listener = gov.nasa.jpf.listener.PreciseRaceDetector,gov.nasa.jpf.listener.DeadlockAnalyzer
+race.exclude = java.*,javax.*,jdk.*,sun.*
+report.console.property_violation = error,trace
+search.multiple_errors = false
+# EXPECTED to fail: harness sanity check
